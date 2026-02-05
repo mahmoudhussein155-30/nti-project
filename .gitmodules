@@ -1,0 +1,3 @@
+[submodule "app/voting-app/cloud-native-devops-platform"]
+	path = app/voting-app/cloud-native-devops-platform
+	url = https://github.com/3bdo7amouda/cloud-native-devops-platform.git
