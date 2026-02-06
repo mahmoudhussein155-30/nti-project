@@ -6,6 +6,11 @@
 **/.terraform/
 **/*.tfstate
 **/*.tfstate.*
+# Terraform state and provider binaries
+*.tfstate
+*.tfstate.backup
+.terraform/
+
 crash.log
 override.tf
 override.tf.json
