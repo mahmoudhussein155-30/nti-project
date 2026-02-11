@@ -1,0 +1,77 @@
+# Non-Production Environment Overrides
+environment: nonprod
+
+replicaCount:
+  vote: 1
+  worker: 1
+  result: 1
+  redis: 1
+
+image:
+  vote:
+    repository: 756148348733.dkr.ecr.eu-west-1.amazonaws.com/vote
+    tag: "nonprod"
+  worker:
+    repository: 756148348733.dkr.ecr.eu-west-1.amazonaws.com/worker
+    tag: "nonprod"
+  result:
+    repository: 756148348733.dkr.ecr.eu-west-1.amazonaws.com/result
+    tag: "nonprod"
+
+service:
+  vote:
+    type: ClusterIP  # Using Ingress instead of LoadBalancer
+  result:
+    type: ClusterIP  # Using Ingress instead of LoadBalancer
+
+resources:
+  vote:
+    requests:
+      memory: "64Mi"
+      cpu: "50m"
+    limits:
+      memory: "128Mi"
+      cpu: "100m"
+  worker:
+    requests:
+      memory: "128Mi"
+      cpu: "100m"
+    limits:
+      memory: "256Mi"
+      cpu: "200m"
+  result:
+    requests:
+      memory: "64Mi"
+      cpu: "50m"
+    limits:
+      memory: "128Mi"
+      cpu: "100m"
+
+ingress:
+  enabled: true
+  className: nginx
+  hosts:
+    - host: vote-nonprod.nti-project.com
+      paths:
+        - path: /
+          pathType: Prefix
+          service: vote
+    - host: result-nonprod.nti-project.com
+      paths:
+        - path: /
+          pathType: Prefix
+          service: result
+
+mongodb:
+  enabled: true
+  secretName: mongodb-atlas-credentials
+  secretKey: connection-string
+  databaseName: voting
+
+vote:
+  env:
+    REDIS: voting-app-redis:6379
+
+result:
+  env:
+    REDIS: voting-app-redis:6379

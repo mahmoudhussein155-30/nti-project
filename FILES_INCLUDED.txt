@@ -1,0 +1,34 @@
+=== NTI Project Files ===
+
+📁 Project Structure:
+./.github/workflows/ci-result.yml
+./.github/workflows/ci-vote.yml
+./.github/workflows/ci-worker.yml
+./.gitignore
+./GETTING_STARTED.md
+./README.md
+./SETUP_CHECKLIST.md
+./START_HERE.md
+./docs/CICD.md
+./docs/QUICKREF.md
+./docs/SETUP.md
+./helm/Chart.yaml
+./helm/templates/ingress.yaml
+./helm/templates/redis-deployment.yaml
+./helm/templates/redis-service.yaml
+./helm/templates/result-deployment.yaml
+./helm/templates/result-service.yaml
+./helm/templates/vote-deployment.yaml
+./helm/templates/vote-service.yaml
+./helm/templates/worker-deployment.yaml
+./helm/values-nonprod.yaml
+./helm/values.yaml
+./infra/k8s-platform/argocd-app.yaml
+./infra/k8s-platform/install-argocd.sh
+./infra/k8s-platform/install-nginx-ingress.sh
+
+📊 File Count:
+Total Files: 28
+Markdown Docs: 7
+YAML Files: 15
+Scripts: 2

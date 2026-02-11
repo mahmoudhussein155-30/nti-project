@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "voting-app.fullname" . }}-result
+  labels:
+    {{- include "voting-app.labels" . | nindent 4 }}
+    app.kubernetes.io/component: result
+spec:
+  replicas: {{ .Values.replicaCount.result }}
+  selector:
+    matchLabels:
+      {{- include "voting-app.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: result
+  template:
+    metadata:
+      labels:
+        {{- include "voting-app.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: result
+    spec:
+      containers:
+      - name: result
+        image: {{ .Values.image.result.repository }}:{{ .Values.image.result.tag }}
+        imagePullPolicy: {{ .Values.image.result.pullPolicy }}
+        ports:
+        - containerPort: 80
+          name: http
+        env:
+        {{- if .Values.mongodb.enabled }}
+        # CRITICAL: Result app expects MONGODB_URI, not MONGO_URL
+        - name: MONGODB_URI
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.mongodb.secretName }}
+              key: {{ .Values.mongodb.secretKey }}
+        - name: MONGO_DB_NAME
+          value: {{ .Values.mongodb.databaseName }}
+        {{- end }}
+        - name: PORT
+          value: "80"
+        {{- range $key, $value := .Values.result.env }}
+        - name: {{ $key }}
+          value: {{ $value | quote }}
+        {{- end }}
+        resources:
+          {{- toYaml .Values.resources.result | nindent 10 }}
+        livenessProbe:
+          httpGet:
+            path: /
+            port: http
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /
+            port: http
+          initialDelaySeconds: 10
+          periodSeconds: 5
